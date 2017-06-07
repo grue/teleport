@@ -24,7 +24,7 @@ LIBS = $(shell find lib -type f -name '*.go') *.go
 # Default target: builds all 3 executables and plaaces them in a current directory
 #
 .PHONY: all
-all: $(VERSRC) $(BINARIES) 
+all: $(VERSRC) $(BINARIES)
 
 $(BUILDDIR)/tctl: $(LIBS) $(TOOLS) tool/tctl/*.go
 	go build -o $(BUILDDIR)/tctl -i $(BUILDFLAGS) ./tool/tctl
@@ -51,7 +51,6 @@ install: build
 	cp -f $(BUILDDIR)/tsh       $(BINDIR)/
 	cp -f $(BUILDDIR)/teleport  $(BINDIR)/
 	mkdir -p $(DATADIR)
-	cp -fr web/dist/* $(DATADIR)
 
 
 .PHONY: clean
@@ -201,3 +200,7 @@ buildbox-grpc:
       --gofast_out=plugins=grpc:.\
     *.proto
 
+# Enterprise build
+.PHONY:enterprise
+enterprise:
+	@if [ -f e/Makefile ]; then $(MAKE) -C e; fi
